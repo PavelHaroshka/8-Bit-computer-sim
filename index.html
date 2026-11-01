@@ -1,0 +1,483 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>8-bit Computer Simulation</title>
+  <link rel="stylesheet" href="/src/style.css" />
+</head>
+
+<body>
+  <div class="app-container">
+    <div class="column">
+      <div class="block">
+        <h3>Clock Module</h3>
+        <div>Status: <span id="clock-status">LOW</span></div>
+        <div class="led-container">
+          <div id="clock-led" class="led" title="Clock Pulse LED"></div>
+        </div>
+      </div>
+
+      <div class="column ram-column">
+        <div class="block ram-block">
+          <h3>RAM</h3>
+
+          <div class="ram-selected">
+            <div>
+              <span class="ram-label">ADDRESS</span>
+              <span id="ram-display-address">0000</span>
+              <span class="ram-decimal">(<span id="ram-display-decimal">0</span>)</span>
+            </div>
+
+            <div>
+              <span class="ram-label">DATA</span>
+              <span id="ram-display-data">········</span>
+            </div>
+          </div>
+
+          <div class="ram-grid">
+            <div class="ram-grid-header">
+              <span>ADDRESS</span>
+              <span>7 6 5 4 3 2 1 0</span>
+            </div>
+
+            <div class="ram-row selected" data-address="0">
+              <span class="ram-address">0</span>
+              <span class="ram-bits">· · · · · · · ·</span>
+            </div>
+            <div class="ram-row" data-address="1">
+              <span class="ram-address">1</span>
+              <span class="ram-bits">· · · · · · · ·</span>
+            </div>
+            <div class="ram-row" data-address="2">
+              <span class="ram-address">2</span>
+              <span class="ram-bits">· · · · · · · ·</span>
+            </div>
+            <div class="ram-row" data-address="3">
+              <span class="ram-address">3</span>
+              <span class="ram-bits">· · · · · · · ·</span>
+            </div>
+            <div class="ram-row" data-address="4">
+              <span class="ram-address">4</span>
+              <span class="ram-bits">· · · · · · · ·</span>
+            </div>
+            <div class="ram-row" data-address="5">
+              <span class="ram-address">5</span>
+              <span class="ram-bits">· · · · · · · ·</span>
+            </div>
+            <div class="ram-row" data-address="6">
+              <span class="ram-address">6</span>
+              <span class="ram-bits">· · · · · · · ·</span>
+            </div>
+            <div class="ram-row" data-address="7">
+              <span class="ram-address">7</span>
+              <span class="ram-bits">· · · · · · · ·</span>
+            </div>
+            <div class="ram-row" data-address="8">
+              <span class="ram-address">8</span>
+              <span class="ram-bits">· · · · · · · ·</span>
+            </div>
+            <div class="ram-row" data-address="9">
+              <span class="ram-address">9</span>
+              <span class="ram-bits">· · · · · · · ·</span>
+            </div>
+            <div class="ram-row" data-address="10">
+              <span class="ram-address">A</span>
+              <span class="ram-bits">· · · · · · · ·</span>
+            </div>
+            <div class="ram-row" data-address="11">
+              <span class="ram-address">B</span>
+              <span class="ram-bits">· · · · · · · ·</span>
+            </div>
+            <div class="ram-row" data-address="12">
+              <span class="ram-address">C</span>
+              <span class="ram-bits">· · · · · · · ·</span>
+            </div>
+            <div class="ram-row" data-address="13">
+              <span class="ram-address">D</span>
+              <span class="ram-bits">· · · · · · · ·</span>
+            </div>
+            <div class="ram-row" data-address="14">
+              <span class="ram-address">E</span>
+              <span class="ram-bits">· · · · · · · ·</span>
+            </div>
+            <div class="ram-row" data-address="15">
+              <span class="ram-address">F</span>
+              <span class="ram-bits">· · · · · · · ·</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+
+    <div class="column">
+      <div class="block">
+        <h3>System Bus</h3>
+        <div>Value: <span id="bus-value">00000000</span></div>
+        <div class="led-container" id="bus-leds">
+          <div class="led" data-bus="true" data-bit="7"></div>
+          <div class="led" data-bus="true" data-bit="6"></div>
+          <div class="led" data-bus="true" data-bit="5"></div>
+          <div class="led" data-bus="true" data-bit="4"></div>
+          <div class="led" data-bus="true" data-bit="3"></div>
+          <div class="led" data-bus="true" data-bit="2"></div>
+          <div class="led" data-bus="true" data-bit="1"></div>
+          <div class="led" data-bus="true" data-bit="0"></div>
+        </div>
+      </div>
+
+      <div class="block" id="pc-block">
+        <h3>Program Counter</h3>
+        <div class="alu-row">
+          <div class="led-container" id="reg-pc-leds">
+            <div class="led" data-reg="pc" data-bit="3"></div>
+            <div class="led" data-reg="pc" data-bit="2"></div>
+            <div class="led" data-reg="pc" data-bit="1"></div>
+            <div class="led" data-reg="pc" data-bit="0"></div>
+          </div>
+          <div class="alu-value">
+            <span id="pc-bin">0000</span>
+            <span class="alu-dec">(<span id="pc-dec">0</span>)</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="block" id="flags-block">
+        <h3>Flags Register</h3>
+        <div class="led-container" id="reg-flags-leds">
+          <div class="led" data-reg="flags" data-bit="3" title="Reserved"></div>
+          <div class="led" data-reg="flags" data-bit="2" title="Negative"></div>
+          <div class="led" data-reg="flags" data-bit="1" title="Zero"></div>
+          <div class="led" data-reg="flags" data-bit="0" title="Carry"></div>
+        </div>
+      </div>
+
+      <div class="block">
+        <h3>CPU</h3>
+        <div style="font-size: 0.8rem; color: #888; margin-bottom: 4px;">
+          <span style="color: #ff9800;">Step Counter (4-bit)</span>
+        </div>
+        <div class="led-container" id="cpu-counter-leds" style="margin-bottom: 12px;">
+          <div class="led" data-reg="cpu-counter" data-bit="3"></div>
+          <div class="led" data-reg="cpu-counter" data-bit="2"></div>
+          <div class="led" data-reg="cpu-counter" data-bit="1"></div>
+          <div class="led" data-reg="cpu-counter" data-bit="0"></div>
+        </div>
+
+        <div style="font-size: 0.8rem; color: #888; margin-bottom: 4px;">
+          <span style="color: #00ffff;">Decoder Steps (T7 - T0)</span>
+        </div>
+        <div class="led-container" id="cpu-decoder-leds" style="margin-bottom: 12px;">
+          <div class="led" data-reg="cpu-decoder" data-bit="7"></div>
+          <div class="led" data-reg="cpu-decoder" data-bit="6"></div>
+          <div class="led" data-reg="cpu-decoder" data-bit="5"></div>
+          <div class="led" data-reg="cpu-decoder" data-bit="4"></div>
+          <div class="led" data-reg="cpu-decoder" data-bit="3"></div>
+          <div class="led" data-reg="cpu-decoder" data-bit="2"></div>
+          <div class="led" data-reg="cpu-decoder" data-bit="1"></div>
+          <div class="led" data-reg="cpu-decoder" data-bit="0"></div>
+        </div>
+      </div>
+
+      <div class="cpu-control-lines">
+        <h4>CPU Control Lines</h4>
+        <div class="cpu-control-grid">
+          <div class="cpu-control" data-cpu-control="AI">
+            <span class="cpu-control-led"></span>
+            <span>AI</span>
+          </div>
+          <div class="cpu-control" data-cpu-control="AO">
+            <span class="cpu-control-led"></span>
+            <span>AO</span>
+          </div>
+          <div class="cpu-control" data-cpu-control="BI">
+            <span class="cpu-control-led"></span>
+            <span>BI</span>
+          </div>
+          <div class="cpu-control" data-cpu-control="BO">
+            <span class="cpu-control-led"></span>
+            <span>BO</span>
+          </div>
+          <div class="cpu-control" data-cpu-control="II">
+            <span class="cpu-control-led"></span>
+            <span>II</span>
+          </div>
+          <div class="cpu-control" data-cpu-control="IO">
+            <span class="cpu-control-led"></span>
+            <span>IO</span>
+          </div>
+          <div class="cpu-control" data-cpu-control="EO">
+            <span class="cpu-control-led"></span>
+            <span>EO</span>
+          </div>
+          <div class="cpu-control" data-cpu-control="SU">
+            <span class="cpu-control-led"></span>
+            <span>SU</span>
+          </div>
+          <div class="cpu-control" data-cpu-control="RI">
+            <span class="cpu-control-led"></span>
+            <span>RI</span>
+          </div>
+          <div class="cpu-control" data-cpu-control="RO">
+            <span class="cpu-control-led"></span>
+            <span>RO</span>
+          </div>
+          <div class="cpu-control" data-cpu-control="MI">
+            <span class="cpu-control-led"></span>
+            <span>MI</span>
+          </div>
+          <div class="cpu-control" data-cpu-control="CO">
+            <span class="cpu-control-led"></span>
+            <span>CO</span>
+          </div>
+          <div class="cpu-control" data-cpu-control="CE">
+            <span class="cpu-control-led"></span>
+            <span>CE</span>
+          </div>
+          <div class="cpu-control" data-cpu-control="J">
+            <span class="cpu-control-led"></span>
+            <span>J</span>
+          </div>
+          <div class="cpu-control" data-cpu-control="OI">
+            <span class="cpu-control-led"></span>
+            <span>OI</span>
+          </div>
+          <div class="cpu-control" data-cpu-control="HLT">
+            <span class="cpu-control-led"></span>
+            <span>HLT</span>
+          </div>
+          <div class="cpu-control" data-cpu-control="FI" title="Flags In: latch flags on this clock edge">
+            <span class="cpu-control-led"></span>
+            <span>FI</span>
+          </div>
+          <div class="cpu-control" data-cpu-control="FC" title="Carry flag">
+            <span class="cpu-control-led"></span>
+            <span>FC</span>
+          </div>
+          <div class="cpu-control" data-cpu-control="FZ" title="Zero flag">
+            <span class="cpu-control-led"></span>
+            <span>FZ</span>
+          </div>
+          <div class="cpu-control" data-cpu-control="FN" title="Negative flag">
+            <span class="cpu-control-led"></span>
+            <span>FN</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="column">
+      <div class="block">
+        <h3>Instruction Register</h3>
+        <div style="font-size: 0.8rem; color: #888; margin-bottom: 4px;">
+          <span style="color: #ff9800;">Opcode (4)</span> | <span style="color: #00ffff;">Operand (4)</span>
+        </div>
+        <div class="led-container" id="reg-ir-leds">
+          <div class="led opcode" data-reg="ir" data-bit="7"></div>
+          <div class="led opcode" data-reg="ir" data-bit="6"></div>
+          <div class="led opcode" data-reg="ir" data-bit="5"></div>
+          <div class="led opcode" data-reg="ir" data-bit="4"></div>
+          <div class="led operand" data-reg="ir" data-bit="3"></div>
+          <div class="led operand" data-reg="ir" data-bit="2"></div>
+          <div class="led operand" data-reg="ir" data-bit="1"></div>
+          <div class="led operand" data-reg="ir" data-bit="0"></div>
+        </div>
+      </div>
+
+      <div class="block">
+        <h3>Register A</h3>
+        <div class="led-container" id="reg-a-leds">
+          <div class="led" data-reg="a" data-bit="7"></div>
+          <div class="led" data-reg="a" data-bit="6"></div>
+          <div class="led" data-reg="a" data-bit="5"></div>
+          <div class="led" data-reg="a" data-bit="4"></div>
+          <div class="led" data-reg="a" data-bit="3"></div>
+          <div class="led" data-reg="a" data-bit="2"></div>
+          <div class="led" data-reg="a" data-bit="1"></div>
+          <div class="led" data-reg="a" data-bit="0"></div>
+        </div>
+      </div>
+
+      <div class="block" id="alu-block">
+        <h3>ALU <span id="alu-mode" class="alu-mode">ADD</span></h3>
+
+        <div class="alu-row">
+          <div class="alu-label">A</div>
+          <div class="led-container" data-led-row="alu-a"></div>
+          <div class="alu-value">
+            <span id="alu-a-bin">00000000</span>
+            <span class="alu-dec">(<span id="alu-a-dec">0</span>)</span>
+          </div>
+        </div>
+
+        <div class="alu-row">
+          <div class="alu-label">B</div>
+          <div class="led-container" data-led-row="alu-b"></div>
+          <div class="alu-value">
+            <span id="alu-b-bin">00000000</span>
+            <span class="alu-dec">(<span id="alu-b-dec">0</span>)</span>
+          </div>
+        </div>
+
+        <div class="alu-row alu-sum-row">
+          <div class="alu-label" id="alu-sum-label">A + B</div>
+          <div class="led-container" data-led-row="alu-sum"></div>
+          <div class="alu-value">
+            <span id="alu-sum-bin">00000000</span>
+            <span class="alu-dec">(<span id="alu-sum-dec">0</span>)</span>
+          </div>
+        </div>
+
+        <div class="alu-carry">
+          <div class="led" data-reg="alu-carry" data-bit="0" title="Carry out of bit 7"></div>
+          <span>Carry out</span>
+        </div>
+      </div>
+
+      <div class="block">
+        <h3>Register B</h3>
+        <div class="led-container" id="reg-b-leds">
+          <div class="led" data-reg="b" data-bit="7"></div>
+          <div class="led" data-reg="b" data-bit="6"></div>
+          <div class="led" data-reg="b" data-bit="5"></div>
+          <div class="led" data-reg="b" data-bit="4"></div>
+          <div class="led" data-reg="b" data-bit="3"></div>
+          <div class="led" data-reg="b" data-bit="2"></div>
+          <div class="led" data-reg="b" data-bit="1"></div>
+          <div class="led" data-reg="b" data-bit="0"></div>
+        </div>
+      </div>
+
+      <div class="block" id="display-block">
+        <h3>Display <span id="display-mode" class="alu-mode">UNSIGNED</span></h3>
+
+        <div id="display-tube" class="tube" role="img" aria-label="Four digit seven-segment display"></div>
+
+        <div class="display-row">
+          <span class="display-label">TEXT</span>
+          <span class="alu-value">
+            <span id="display-text" class="display-text"> 0</span>
+          </span>
+        </div>
+        <div class="display-row">
+          <span class="display-label">VALUE</span>
+          <span class="alu-value">
+            <span id="display-bin">00000000</span>
+            <span class="alu-dec">(<span id="display-dec">0</span>)</span>
+          </span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <button id="controls-toggle" class="controls-toggle" type="button">Manual Controls</button>
+
+  <div id="controls-panel" class="controls-panel" hidden>
+    <div id="controls-header" class="controls-header">
+      <span>Manual Controls</span>
+      <button id="controls-close" type="button" aria-label="Close and release all lines">&times;</button>
+    </div>
+
+    <section>
+      <h4>CPU Mode</h4>
+      <div class="chip-row mode-row">
+        <button class="chip active" type="button" id="cpu-mode-toggle" aria-pressed="false">
+          Manual Mode
+        </button>
+        <button class="chip" type="button" id="clock-step">Step ⏵</button>
+      </div>
+    </section>
+
+    <section>
+      <h4>System Control</h4>
+      <div class="chip-row mode-row">
+        <button class="chip" type="button" data-reset="true" aria-pressed="false">Reset</button>
+        <button class="chip" type="button" data-halt="true" aria-pressed="false">Halt</button>
+      </div>
+    </section>
+
+    <section data-manual-only>
+      <h4>Input switches</h4>
+      <div id="input-switches" class="switch-row"></div>
+      <div class="readout">
+        <span id="input-binary">00000000</span> (<span id="input-decimal">0</span>)
+      </div>
+    </section>
+
+    <section class="control-section" data-manual-only>
+      <h4>RAM address</h4>
+      <div id="ram-address-switches" class="switch-row"></div>
+      <div class="readout">
+        Address:
+        <strong id="ram-address-binary">0000</strong>
+        (<span id="ram-address-decimal">0</span>)
+      </div>
+    </section>
+
+    <section data-manual-only>
+      <h4>Drive the bus (output enable)</h4>
+      <div class="chip-row oe-row">
+        <button class="chip" type="button" data-oe="none">None</button>
+        <button class="chip" type="button" data-oe="in">Input</button>
+        <button class="chip" type="button" data-oe="a">A</button>
+        <button class="chip" type="button" data-oe="b">B</button>
+        <button class="chip" type="button" data-oe="ir">IR</button>
+        <button class="chip" type="button" data-oe="alu">ALU</button>
+        <button class="chip" type="button" data-oe="ram">RAM</button>
+        <button class="chip" type="button" data-oe="pc" title="Put the program counter on the bus">PC</button>
+      </div>
+    </section>
+
+    <section data-manual-only>
+      <h4>Load from the bus</h4>
+      <div class="chip-row load-row">
+        <button class="chip" type="button" data-load="a">A</button>
+        <button class="chip" type="button" data-load="b">B</button>
+        <button class="chip" type="button" data-load="ir">IR</button>
+        <button class="chip" type="button" data-load="mar">MAR</button>
+        <button class="chip" type="button" data-load="ram">RAM</button>
+        <button class="chip" type="button" data-load="pc" title="Jump: load the program counter from the bus">PC</button>
+        <button class="chip" type="button" data-load="out" title="Load the display's output register from the bus">OUT</button>
+    </section>
+
+    <section data-manual-only>
+      <h4>ALU mode</h4>
+      <div class="chip-row mode-row">
+        <button class="chip" type="button" data-alu-mode="add">Add (A + B)</button>
+        <button class="chip" type="button" data-alu-mode="sub">Subtract (A &minus; B)</button>
+      </div>
+    </section>
+
+    <section data-manual-only>
+      <h4>Program counter</h4>
+      <div class="chip-row count-row">
+        <button class="chip" type="button" data-pc-count aria-pressed="false" title="While on, the PC counts up on every clock pulse">Count enable</button>
+      </div>
+    </section>
+
+    <section data-manual-only>
+      <h4>Flags</h4>
+      <div class="chip-row count-row">
+        <button class="chip" type="button" data-flags-load aria-pressed="false" title="While on, the flags latch the ALU result on every clock pulse">Latch flags</button>
+      </div>
+    </section>
+
+    <section data-manual-only>
+      <h4>Display mode</h4>
+      <div class="chip-row mode-row">
+        <button class="chip" type="button" data-display-mode="unsigned">Unsigned (0 to 255)</button>
+        <button class="chip" type="button" data-display-mode="signed">Signed (&minus;128 to 127)</button>
+      </div>
+    </section>
+
+  </div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+
+</html>
